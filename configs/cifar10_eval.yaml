@@ -1,0 +1,33 @@
+name: "cifar10_ot_cached"
+
+data:
+    name: "cifar10"
+    data_root: "./data/CIFAR10"
+    image_size: 32
+    random_flip: False
+
+model:
+    in_channels: 3
+    out_ch: 3
+    input_size: 32
+    ch: 128
+    ch_mult: [1, 2, 2, 2]
+    num_res_blocks: 2
+    attn_resolutions: [2, ]
+    dropout: 0.1
+    resamp_with_conv: True
+    num_heads: 4
+    num_head_channels: 64
+
+evaluation:
+    type: "FID"
+
+    use_fp16: False
+
+    batching:
+        batch_size: 16
+        num_workers: 4
+
+    num_real_samples_for_fid: 10000
+    num_samples_for_fid: 50000
+    steps_to_evaluate: ["midpoint-6", "dopri5-1"]

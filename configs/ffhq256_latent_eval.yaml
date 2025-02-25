@@ -1,0 +1,35 @@
+name: "ffhq256_latent_ot_cached"
+
+data:
+    name: "h5"
+    data_root: "./data/ffhq256"
+    image_size: 256
+    random_flip: False
+
+model:
+    in_channels: 4
+    out_ch: 4
+    input_size: 32
+    ch: 256
+    ch_mult: [1, 2, 3, 4]
+    num_res_blocks: 2
+    attn_resolutions: [2, 4, 8]
+    dropout: 0.1
+    resamp_with_conv: True
+    num_heads: 4
+    num_head_channels: 64
+    ae_config: "kl_f8"
+    ae_checkpoint: "./ae_checkpoints/vae-ft-mse-840000-ema-pruned.ckpt"
+
+evaluation:
+    type: "FID"
+
+    use_fp16: False
+
+    batching:
+        batch_size: 4
+        num_workers: 4
+
+    num_real_samples_for_fid: 50000
+    num_samples_for_fid: 50000
+    steps_to_evaluate: ["midpoint-1", "midpoint-2", "midpoint-4", "dopri5-1"]

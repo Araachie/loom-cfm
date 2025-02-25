@@ -1,0 +1,35 @@
+name: "imagenet64_ot_cached"
+
+data:
+    name: "imagefolder"
+    data_root: "./data/imagenet64"
+    image_size: 64
+    random_flip: False
+
+model:
+    in_channels: 3
+    out_ch: 3
+    input_size: 64
+    ch: 192
+    ch_mult: [1, 2, 3, 4]
+    num_res_blocks: 2
+    attn_resolutions: [4]
+    dropout: 0.1
+    resamp_with_conv: True
+    num_heads: 4
+    num_head_channels: 64
+
+evaluation:
+    type: "FID"
+
+    use_fp16: False
+
+    batching:
+        batch_size: 16
+        num_workers: 4
+
+    num_real_samples_for_fid: 50000
+    num_samples_for_fid: 50000
+    steps_to_evaluate: ["midpoint-2", "midpoint-4", "midpoint-6", "dopri5-1"]
+
+

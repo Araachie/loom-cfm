@@ -1,0 +1,69 @@
+name: "imagenet32_ot_cached"
+
+data:
+    name: "imagenet"
+    data_root: "./data/imagenet32"
+    image_size: 32
+    random_flip: True
+
+model:
+    in_channels: 3
+    out_ch: 3
+    input_size: 32
+    ch: 128
+    ch_mult: [1, 2, 2, 2]
+    num_res_blocks: 3
+    attn_resolutions: [2, 4]
+    dropout: 0.1
+    resamp_with_conv: True
+    num_heads: 4
+    num_head_channels: 64
+
+training:
+    num_epochs: 200
+
+    sigma: 0.0000001
+    attracting: False
+    t_dist: "uniform"
+
+    source: "normal"
+    coupling: "ot_cached_seed"
+    coupling_params:
+        cache_dir: "./data/imagenet32/noise_cache"
+        num_caches: 2
+
+    resample_every: 200
+    train_after: 0
+
+    use_fp16: False
+
+    ema_decay: 0.9999
+
+    batching:
+        batch_size: 128
+        num_workers: 4
+
+    optimizer:
+        optimizer: "Adam"
+        learning_rate: 0.0001
+        weight_decay: 0.000
+        grad_clip: 1.0
+        scheduler_p: 0.0
+        num_warmup_steps: 20000
+
+    loss_weights:
+        flow_matching_loss: 1.0
+        curvature_loss: 0.0
+
+evaluation:
+    type: "FID"
+
+    use_fp16: False
+
+    batching:
+        batch_size: 16
+        num_workers: 4
+
+    num_real_samples_for_fid: 50000
+    num_samples_for_fid: 5000
+    steps_to_evaluate: ["midpoint-1", "midpoint-2", "midpoint-4", "midpoint-6"]
