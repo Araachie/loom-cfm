@@ -132,7 +132,7 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section hero is-light">
   <div class="container is-max-desktop">
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
@@ -161,6 +161,89 @@
   </div>
 </section>
 
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+
+      <div class="columns is-centered">
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3">Algorithm</h2>
+            <div class="has-text-centered">
+              <image src="./static/images/fm.png" width="80%">
+            </div>
+            <p>
+              In diffusion and flow-based generative models, to generate a sample, we start from noise and integrate the learned vector field, until a clean data point is reached. However, numerical integration requires discretization, which introduces errors. Finer discretization reduces errors but increases computational cost, making inference slower. Straighter trajectories would reduce the number of function evaluations (NFE) and speed-up sampling.
+            </p>
+            <div class="container-center">
+              <p>
+                <img src="./static/images/independent.png", width="31%">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="./static/images/ot.png", width="32.4%">
+              </p>
+            </div>
+            <p>
+              In flow matching the default way of coupling, or sampling minibatches, is to sample noise and data points independently. This leads to ambiguity during the training, as the same input to the network may have multiple different targets in different minibatches. Resolving this ambiguity though averaging results in learning curved sampling trajectories. Prior work has tackled this problem through locally changing the independent coupling by reassigning noise and data points within each separate minibatch (e.g. by solving local OT). However, this approach does not effectively scale to larger and higher-dimensional data.
+            </p>
+            <div class="has-text-centered">
+              <image src="./static/images/loom.png" width="70%">
+            </div>
+            <p>
+              Similarly to the prior work (e.g. OT-CFM [1] or BatchOT [2]), <span class="dnerf">LOOM-CFM</span> also solves local OT to reassign independently sampled noise-data pairs within a minibatch. However, in contrast to previous approaches, <span class="dnerf">LOOM-CFM</span> works with a fixed set of noise samples and stores the assignments to reuse them as starting points in future minibatches. This procedure allows minibatches to communicate, which leads to finding stricly more globally optimal assignments that the prior work.
+              <br>
+              To prevent overfitting to the fixed set of noise samples, we propose to store more than one assigned noise sample per data point in the dataset.
+              At each training iteration a minibatch of data-noise pairs is obtained by first sampling data points
+              and then randomly picking one of the assigned noises. This corresponds to artificially enlarging the
+              dataset by duplicating the data points and does not change the underlying data distribution.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+
+      <div class="columns is-centered">
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3">Results</h2>
+            <div class="container-center">
+              <p>
+                <img src="./static/images/fid_plot.png", width="45%">
+                <img src="./static/images/curv.png", width="45%">
+              </p>
+            </div>
+            <br>
+            <p>
+              <b>Highlights</b>:
+              <li>
+                <span class="dnerf">LOOM-CFM</span> yields straighter sampling trajectories and reduces the FID with 12 NFE by 41% on CIFAR10, 46% on ImageNet-32, and 54% on ImageNet-64 compared to minibatch OT methods;
+              </li>
+              <li>
+                <span class="dnerf">LOOM-CFM</span> serves as an effective initialization for model
+                distillation, further enhancing inference speed;
+              </li>
+              <li>
+                <span class="dnerf">LOOM-CFM</span> is compatible with latent flow matching for generating
+                higher-resolution outputs.
+              </li>
+            </p>
+            <p>
+              For more results and details, check the paper.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container is-max-desktop content">
     <h2 class="title is-3">BibTeX</h2>
@@ -171,6 +254,27 @@
         year={2025},
         url={https://openreview.net/forum?id=rsGPrJDIhh}
       }</code></pre>
+  </div>
+</section>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+
+      <div class="columns is-centered">
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3">References</h2>
+            <p>
+              [1] Tong, Alexander, et al. "Improving and generalizing flow-based generative models with minibatch optimal transport." Transactions on Machine Learning Research, 2023.
+              <br>
+              [2] Pooladian, Aram-Alexandre, et al. "Multisample Flow Matching: Straightening Flows with Minibatch Couplings." International Conference on Machine Learning. PMLR, 2023.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
